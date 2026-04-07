@@ -1,17 +1,21 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+import joblib
 
 app = FastAPI()
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: bool = None
+# Load model
+model = joblib.load("model.pkl")
 
-@app.post("/items/")
-def create_item(item: Item):
-    return item
+# Define input format properly
+class InputData(BaseModel):
+    data: list
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def home():
+    return {"message": "AI DevOps API is running"}
+
+@app.post("/predict")
+def predict(input: InputData):
+    prediction = model.predict([input.data])
+    return {"prediction": prediction.tolist()}
