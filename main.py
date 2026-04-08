@@ -17,8 +17,11 @@ def home():
 
 @app.post("/predict")
 def predict(input: InputData):
-    prediction = model.predict([input.data])
-    return {"prediction": prediction.tolist()}
+    pred = model.predict([input.data])[0]
+    return {
+        "prediction_numeric": int(pred),
+        "prediction_label": class_labels[pred]
+    }
 
 import os
 
