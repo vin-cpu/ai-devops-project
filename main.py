@@ -15,6 +15,11 @@ class InputData(BaseModel):
 def home():
     return {"message": "AI DevOps API is running"}
 
+class_labels = {
+    0: "Class 1 (Setosa)",
+    1: "Class 2 (Versicolor)",
+    2: "Class 3 (Virginica)"
+}
 @app.post("/predict")
 def predict(input: InputData):
     pred = model.predict([input.data])[0]
