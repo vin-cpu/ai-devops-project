@@ -1,13 +1,21 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
+import os
 
 app = FastAPI()
 
 # Load model
 model = joblib.load("model.pkl")
 
-# Define input format properly
+# Define class labels
+class_labels = {
+    0: "Class 1 (Setosa)",
+    1: "Class 2 (Versicolor)",
+    2: "Class 3 (Virginica)"
+}
+
+# Input format
 class InputData(BaseModel):
     data: list
 
@@ -15,11 +23,6 @@ class InputData(BaseModel):
 def home():
     return {"message": "AI DevOps API is running"}
 
-class_labels = {
-    0: "Class 1 (Setosa)",
-    1: "Class 2 (Versicolor)",
-    2: "Class 3 (Virginica)"
-}
 @app.post("/predict")
 def predict(input: InputData):
     pred = model.predict([input.data])[0]
@@ -27,8 +30,6 @@ def predict(input: InputData):
         "prediction_numeric": int(pred),
         "prediction_label": class_labels[pred]
     }
-
-import os
 
 port = int(os.environ.get("PORT", 8000))
 
