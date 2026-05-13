@@ -6,7 +6,7 @@ import os
 app = FastAPI()
 
 # Load model
-model = joblib.load("model.pkl")
+model = joblib.load("model (3).pkl")
 
 # Define class labels
 class_labels = {
